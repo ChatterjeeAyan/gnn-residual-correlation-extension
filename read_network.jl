@@ -110,6 +110,8 @@ function read_county(prediction, year)
     y = ff[:,pos];
     f = [vcat(ff[i,1:pos-1], ff[i,pos+1:end]) for i in 1:size(dat,1)];
 
+    print([adjacency_matrix(g)]);
+
     return g, [adjacency_matrix(g)], y, f;
 end
 
@@ -290,6 +292,40 @@ function read_sexual(studynum)
     return G, [adjacency_matrix(G)], y, f;
 end
 
+function read_cox()
+
+    G0 = SimpleGraph(19252);
+
+    df_edges = DataFrame(CSV.File("COX2//COX2.edges",header=false)); #, DataFrame) #,header=false);
+    
+    for i in 1:size(df_edges,1)  
+        add_edge!(G0, df_edges.Column1[i], df_edges.Column2[i]);
+    end
+
+    #lcc = sort(connected_components(G0), by=cc->length(cc))[end];
+    #G0,_ = induced_subgraph(G0, lcc)
+
+    yy = readdlm("COX2\\COX2.node_labels");
+    
+    df_attr = DataFrame(CSV.File("COX2\\COX2.node_attrs",header=false));
+    ff = zeros(19252,3);
+    for i in 1:size(df_attr,1)  
+        temp = zeros(3);
+        temp[1] = df_attr.Column1[i]; 
+        temp[2] = df_attr.Column2[i];  
+        temp[3] = df_attr.Column3[i];
+	ff[i,:] = temp
+    end
+
+    y = [yy[i] for i in 1:size(yy,1)];
+
+    f = [ff[i,:] for i in 1:size(ff,1)];
+
+    #print([adjacency_matrix(G)])
+    
+    return G0, [adjacency_matrix(G0)], y, f;
+end
+
 function read_network(network_name)
     (p = match(r"ising_([0-9]+)_([0-9\.\-]+)_([0-9\.\-]+)$", network_name)) != nothing && return simulate_ising(parse(Int, p[1]), parse(Float64, p[2]), parse(Float64, p[3]));
     (p = match(r"county_([a-z]+)_([0-9]+)$", network_name)) != nothing && return read_county(p[1], parse(Int, p[2]));
@@ -297,4 +333,5 @@ function read_network(network_name)
     (p = match(r"sexual_([0-9]+)$", network_name)) != nothing && return read_sexual(parse(Int, p[1]));
     (p = match(r"Anaheim", network_name)) != nothing       && return read_transportation_network(network_name, 8, 1:2, [3,4,5,8], 6, [1,2,4], 1:416);
     (p = match(r"ChicagoSketch", network_name)) != nothing && return read_transportation_network(network_name, 7, 1:2, [3,4,5,8], 1, [1,2,3], 388:933);
+    (p = match(r"CoxData", network_name)) != nothing && return read_cox();
 end
