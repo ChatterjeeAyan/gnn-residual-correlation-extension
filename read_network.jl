@@ -302,10 +302,12 @@ function read_cox()
         add_edge!(G0, df_edges.Column1[i], df_edges.Column2[i]);
     end
 
-    #lcc = sort(connected_components(G0), by=cc->length(cc))[end];
-    #G0,_ = induced_subgraph(G0, lcc)
+    lcc = sort(connected_components(G0), by=cc->length(cc))[end];
+    G,_ = induced_subgraph(G0, lcc)
 
     yy = readdlm("COX2\\COX2.node_labels");
+
+    y_subgraph = [yy[j] for j in vertices(G)]
     
     df_attr = DataFrame(CSV.File("COX2\\COX2.node_attrs",header=false));
     ff = zeros(19252,3);
@@ -317,13 +319,16 @@ function read_cox()
 	ff[i,:] = temp
     end
 
-    y = [yy[i] for i in 1:size(yy,1)];
+    ff_subgraph = [ff[j,:] for j in vertices(G)]
 
-    f = [ff[i,:] for i in 1:size(ff,1)];
+    y = [y_subgraph[i] for i in 1:size(y_subgraph,1)];
 
-    #print([adjacency_matrix(G)])
-    
-    return G0, [adjacency_matrix(G0)], y, f;
+    f = [ff_subgraph[i] for i in 1:size(ff_subgraph,1)];
+
+    print(y)
+    print(f)
+   
+    return G, [adjacency_matrix(G)], y, f;
 end
 
 function read_network(network_name)
