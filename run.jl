@@ -10,7 +10,7 @@ if inductive
     run_dataset("county_unemployment_2012", ["county_unemployment_2016"], R2, regressor, correlation, inductive);
     run_dataset("county_election_2012", ["county_election_2016"], R2, regressor, correlation, inductive);
     run_dataset("climate_2007_airT", ["climate_2008_airT"], R2, regressor, correlation, inductive);
-    run_dataset("climate_2007_landT", ["climate_2008_airT"], R2, regressor, correlation, inductive);
+    run_dataset("climate_2007_landT", ["climate_2008_landT"], R2, regressor, correlation, inductive);
     run_dataset("climate_2007_precipitation", ["climate_2008_precipitation"], R2, regressor, correlation, inductive);
     run_dataset("climate_2007_sunlight", ["climate_2008_sunlight"], R2, regressor, correlation, inductive);
     run_dataset("climate_2007_pm2.5", ["climate_2008_pm2.5"], R2, regressor, correlation, inductive);
