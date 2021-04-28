@@ -13,6 +13,8 @@ The code is tested under in Julia 1.0.5, you can install all dependent packages 
 ```
 julia env.jl
 ```
+Original GitHub repository: https://github.com/000Justin000/gnn-residual-correlation
+
 As an extension, the effect of homophily has been studied on the models. Different Ising models with varying homophily have been used for this purpose. 
 
 The reproduced outputs are available in [/new logs](/new logs).
